@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public class Assinatura {
     private BigDecimal mensalidade;
-    private LocalDate begin;
+    private final LocalDate begin;
     private Optional<LocalDate> end;
-    private Cliente cliente;
+    private final Cliente cliente;
 
     public Assinatura(BigDecimal mensalidade, LocalDate begin, Optional<LocalDate> end, Cliente cliente) {
         this.mensalidade = mensalidade;

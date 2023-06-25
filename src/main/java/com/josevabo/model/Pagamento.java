@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Pagamento {
     private List<Produto> produtos;
-    private LocalDate dataCompra;
-    private Cliente cliente;
+    private final LocalDate dataCompra;
+    private final Cliente cliente;
 
     public Pagamento(List<Produto> produtos, LocalDate dataCompra, Cliente cliente) {
         this.produtos = produtos;

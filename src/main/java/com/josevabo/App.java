@@ -49,7 +49,7 @@ public class App
 
         List<Pagamento> pagamentos = Arrays.asList(pagamentoJoao, pagamentoMaria, pagamentoJose);
         pagamentos.sort(Comparator.comparing(Pagamento::getDataCompra));
-        pagamentos.stream().map(p -> p.getDataCompra()).forEach(System.out::println);
+        pagamentos.stream().map(Pagamento::getDataCompra).forEach(System.out::println);
 
         // EXERCÍCIO 3 -
         // Calcule e Imprima a soma dos valores de um pagamento com optional e recebendo um Double diretamente.
@@ -60,7 +60,7 @@ public class App
         // EXERCÍCIO 4
         //  Calcule o Valor de todos os pagamentos da Lista de pagamentos.
         System.out.println("\n\nEXERCÍCIO 4 - Calcule o Valor de todos os pagamentos da Lista de pagamentos.\n");
-        BigDecimal valorTotal = pagamentos.stream().map(Pagamento::getProdutos).flatMap(Collection::stream).map(Produto::getPreco).reduce(BigDecimal.ZERO, (p1, p2) -> p1.add(p2));
+        BigDecimal valorTotal = pagamentos.stream().map(Pagamento::getProdutos).flatMap(Collection::stream).map(Produto::getPreco).reduce(BigDecimal.ZERO, BigDecimal::add);
         System.out.println("Valor total dos pagamentos é: " + valorTotal);
 
 
@@ -73,7 +73,7 @@ public class App
                 .flatMap(List::stream)
                 .collect(Collectors.groupingBy(Produto::getNome, Collectors.counting()))
                 .forEach((k,v) ->
-                        System.out.println(String.format("Produto: \"%s\"  Quantidade vendida: %d",k,  v))
+                        System.out.printf("Produto: \"%s\"  Quantidade vendida: %d%n",k,  v)
                 );
 
         // EXERCÍCIO 6
@@ -83,7 +83,7 @@ public class App
                 .collect(Collectors.groupingBy(Pagamento::getCliente, Collectors.mapping(p -> p.getProdutos(), Collectors.toList())))
                 .entrySet().stream()
                 .collect(Collectors.toMap(
-                        entry -> entry.getKey(),
+                        Map.Entry::getKey,
                         entry -> entry.getValue().stream()
                                 .flatMap(List::stream).collect(Collectors.toList())
                 ));
@@ -96,7 +96,7 @@ public class App
                 .sorted(Comparator.comparing(entry ->
                         entry.getValue().stream()
                                 .map(Produto::getPreco)
-                                .reduce(BigDecimal.ZERO, (a, b) -> a.subtract(b)))
+                                .reduce(BigDecimal.ZERO, BigDecimal::subtract))
                 ).findFirst().map(Map.Entry::getKey);
         clienteQueMaisGastou.ifPresent(c-> System.out.println("Cliente que mais gastou foi  "+ c.getNome()));
 
@@ -112,10 +112,10 @@ public class App
                             entry -> entry.getValue().stream()
                                         .map(Pagamento::getProdutos)
                                         .flatMap(List::stream).map(Produto::getPreco)
-                                        .reduce(BigDecimal.ZERO, (a, b) -> a.add(b))
+                                        .reduce(BigDecimal.ZERO, BigDecimal::add)
                             ));
 
-        vendasPorMes.forEach((mes,vendas)-> System.out.println(String.format("Total de %s em vendas no mes de %s", vendas, mes)));
+        vendasPorMes.forEach((mes,vendas)-> System.out.printf("Total de %s em vendas no mes de %s%n", vendas, mes));
 
         // EXERCÍCIO 9
         // 9 - Crie 3 assinaturas com assinaturas de 99.98 reais, sendo 2 deles com assinaturas encerradas.
@@ -162,8 +162,7 @@ public class App
         ));
 
         valoresAssinaturas.forEach(
-                (ass, valor) -> System.out.println(
-                        String.format("Assinatura do cliente %s com valor total de %s", ass.getCliente().getNome(), valor))
+                (ass, valor) -> System.out.printf("Assinatura do cliente %s com valor total de %s%n", ass.getCliente().getNome(), valor)
         );
 
     }
