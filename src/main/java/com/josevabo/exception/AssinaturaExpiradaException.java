@@ -1,6 +1,6 @@
 package com.josevabo.exception;
 
-public class AssinaturaExpiradaException extends Exception{
+public class AssinaturaExpiradaException extends RuntimeException{
 
     public AssinaturaExpiradaException() {
     }

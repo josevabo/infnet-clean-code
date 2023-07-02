@@ -76,7 +76,11 @@ public class Assinatura {
         return BigDecimal.ZERO;
     }
 
-    private BigDecimal calcularValorAcumuladoAssinatura(){
+    public long getMesesAssinatura(){
+        return Period.between(this.begin, this.end.orElse(LocalDate.now())).toTotalMonths();
+    }
+
+    public BigDecimal calcularValorAcumuladoAssinatura(){
         long mesesDeAssinatura = Period.between(this.begin, end.orElse(LocalDate.now())).toTotalMonths() + 1l;
         return this.mensalidade.multiply(BigDecimal.valueOf(mesesDeAssinatura));
     }

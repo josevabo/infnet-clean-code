@@ -5,12 +5,12 @@ import com.josevabo.exception.AssinaturaExpiradaException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Compra {
+public class Pagamento {
     private List<Produto> produtos;
     private final LocalDate dataCompra;
     private final Assinatura assinatura;
 
-    public Compra(List<Produto> produtos, LocalDate dataCompra, Assinatura assinatura) throws AssinaturaExpiradaException {
+    public Pagamento(List<Produto> produtos, LocalDate dataCompra, Assinatura assinatura) {
         if(!assinatura.estaVigente())
             throw new AssinaturaExpiradaException("Não é possível realizar compra sem assinatura vigente");
 
@@ -18,6 +18,7 @@ public class Compra {
         this.produtos = produtos;
         this.dataCompra = dataCompra;
     }
+
 
     public List<Produto> getProdutos() {
         return produtos;
