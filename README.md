@@ -11,5 +11,3 @@ Foram executadas algumas rodadas de avaliação do sonar, a primeira passou, mas
 
 Os code smells foram resolvidos, inclusive sendo necessário adicionar um logger ao projeto e arquivo de configuração (main/resources/log4j2.xml):
 ![Sonar inicial com code smells](/images/sonar_2.png)
-
-token sqp_f5b77457a366486f1718022c520745b8aababe61
