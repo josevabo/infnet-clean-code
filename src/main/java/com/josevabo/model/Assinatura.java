@@ -1,5 +1,7 @@
 package com.josevabo.model;
 
+import jdk.vm.ci.meta.Local;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -33,6 +35,15 @@ public class Assinatura {
         this.cliente = cliente;
         this.tipoAssinatura = tipoAssinatura;
         this.dataVigencia = dataVigencia;
+    }
+
+    private Assinatura(Builder builder){
+        this.mensalidade = builder.mensalidade;
+        this.begin =  builder.begin;
+        this.end =  builder.end;
+        this.cliente =  builder.cliente;
+        this.tipoAssinatura =  builder.tipoAssinatura;
+        this.dataVigencia =  builder.dataVigencia;
     }
 
     public void encerrar(LocalDate dataEncerramento){
@@ -98,5 +109,53 @@ public class Assinatura {
                 ", cliente=" + cliente.getNome() +
                 ", tipoAssinatura=" + tipoAssinatura +
                 '}';
+    }
+
+    public static class Builder{
+        private BigDecimal mensalidade;
+        private final LocalDate begin;
+        private Optional<LocalDate> end;
+        private final Cliente cliente;
+        private TipoAssinatura tipoAssinatura;
+        private LocalDate dataVigencia;
+
+        public Builder(BigDecimal mensalidade, Cliente cliente, LocalDate begin){
+            this.mensalidade = mensalidade;
+            this.cliente = cliente;
+            this.begin = begin;
+        }
+
+        public Builder(Double mensalidade, Cliente cliente, LocalDate begin){
+            this.mensalidade = BigDecimal.valueOf(mensalidade);
+            this.cliente = cliente;
+            this.begin = begin;
+        }
+
+        public Builder assinaturaAnual(){
+            this.tipoAssinatura = TipoAssinatura.ANUAL;
+            return this;
+        }
+        public Builder assinaturaSemestral(){
+            this.tipoAssinatura = TipoAssinatura.SEMESTRAL;
+            return this;
+        }
+        public Builder assinaturaTrimestral(){
+            this.tipoAssinatura = TipoAssinatura.TRIMESTRAL;
+            return this;
+        }
+        public Builder comDataVigencia(LocalDate dataVigencia){
+            this.dataVigencia = dataVigencia;
+            return this;
+        }
+        public Builder encerradaEm(LocalDate end){
+            this.end = Optional.of(end);
+            this.dataVigencia = end;
+            return this;
+        }
+
+        public Assinatura build(){
+            return new Assinatura(this);
+        }
+
     }
 }

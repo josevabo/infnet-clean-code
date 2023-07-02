@@ -1,15 +1,34 @@
 # Projeto Infnet Clean Code
 
-## Lista de Exercícios 2
-1. Foi criado o Enum TipoAssinatura, contendo o atributo taxa de cada tipo.
-2. O atributo dataVigencia e método estaVigente() foram criados na classe Assinatura para controlar até quando a assinatura está vigente (paga)
-3. Ao instanciar um pagamento, o construtor sempre checa se a assinatura está vigente, retornando erro específico em caso negativo
-4. As tarefas dos 12 exercícios resolvidos na lista 1 foram refatoradas. Agora os algoritmos que realizam sort, agrupamento e cálculos foram extraídos para métodos dentro de classes. 
-### Sonar
-Foram executadas algumas rodadas de avaliação do sonar, a primeira passou, mas listou alguns code smells:
-![Sonar inicial com code smells](/images/sonar_1.png)
+## Lista de Exercícios 3 - Design Pattern Builder
+Foi escolhida a classe Assinatura como alvo de uma pequena refatoração. A necessidade de vários atributos para construção de um objeto tornava complexa a instanciação por construtor.
 
-Os code smells foram resolvidos, inclusive sendo necessário adicionar um logger ao projeto e arquivo de configuração (main/resources/log4j2.xml):
-![Sonar inicial com code smells](/images/sonar_2.png)
+Segue exemplo antes da aplicação do pattern Builder:
+```java
+Assinatura assinaturaJoao = new Assinatura(BigDecimal.valueOf(99.98), LocalDate.of(2023, 1, 1), joao, TipoAssinatura.TRIMESTRAL, LocalDate.now().plusMonths(3));
+```
 
-token sqp_f5b77457a366486f1718022c520745b8aababe61
+Com a aplicação do pattern builder a classe é possível instanciar de forma intuitiva objetos que tenham características diferentes, como tipo de assinatura, data encerramento e vigência.
+
+Exemplo de assinatura com encerramento antes e depois do pattern:
+```java
+//ANTES
+Assinatura assinaturaJoaoEncerrada = new Assinatura(
+        BigDecimal.valueOf(99.98), 
+        LocalDate.of(2022, 10, 1), 
+        LocalDate.of(2023, 12, 1), 
+        jose, 
+        TipoAssinatura.ANUAL, 
+        LocalDate.now().plusMonths(1));
+
+//DEPOIS
+Assinatura assinaturaJoaoEncerrada = new Assinatura.Builder(
+        99.98, 
+        joao, 
+        LocalDate.of(2022, 10, 1))
+    .assinaturaAnual()
+    .encerradaEm(LocalDate.now().minusMonths(2))
+    .build();
+```
+
+Após a criação da classe interna Builder, é possível iniciar um objeto com atributos mínimos e acrescentar atributos de forma mais legível com métodos dedicados.
